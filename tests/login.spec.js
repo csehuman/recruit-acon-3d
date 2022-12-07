@@ -184,6 +184,69 @@ test('3-3 한글 포함 아이디', async ({ context, page }) => {
     await expect(page).toHaveURL('https://www.acon3d.com/ko/toon/users/login');
 });
 
+test('4-1 로그아웃', async ({ context, page }) => {
+    await page.goto('https://www.acon3d.com/ko/toon');
+
+    await page.getByRole('link', { name: '로그인' }).click();
+
+    await simpleLoginFromLoginPage(page, process.env.VALID_USERNAME, process.env.VALID_PASSWORD, true);
+
+    await expect(page).toHaveURL('https://www.acon3d.com/ko/toon');
+
+    await page.getByRole('navigation').locator('svg').nth(2).click({ delay : 200 });
+    await page.locator('a').filter({ hasText: '로그아웃' }).click({ delay : 200 });
+
+    await page.getByRole('link', { name: '로그인' }).click();
+    await expect(page).toHaveURL('https://www.acon3d.com/ko/toon/users/login');
+});
+
+test('5-1 아이디 저장 기능 작동 (활성화 상태)', async ({ context, page }) => {
+    await page.goto('https://www.acon3d.com/ko/toon');
+
+    await page.getByRole('link', { name: '로그인' }).click();
+    await expect(page.locator('.cCZhP')).toHaveCount(1);
+
+    await simpleLoginFromLoginPage(page, process.env.VALID_USERNAME, process.env.VALID_PASSWORD, true);
+
+    await expect(page).toHaveURL('https://www.acon3d.com/ko/toon');
+
+    await page.getByRole('navigation').locator('svg').nth(2).click({ delay : 200 });
+    await page.locator('a').filter({ hasText: '로그아웃' }).click({ delay : 200 });
+
+    await page.getByRole('link', { name: '로그인' }).click();
+    await expect(page).toHaveURL('https://www.acon3d.com/ko/toon/users/login');
+
+    await expect(page.getByPlaceholder('아이디')).toHaveValue(process.env.VALID_USERNAME);
+});
+
+test('5-2 아이디 저장 기능 작동 (비활성화 상태)', async ({ context, page }) => {
+    await page.goto('https://www.acon3d.com/ko/toon')
+
+    await page.getByRole('link', { name: '로그인' }).click();
+    await expect(page.locator('.cCZhP')).toHaveCount(1);
+
+    await page.locator('.cCZhP').click();
+    await expect(page.locator('.fPbsVt')).toHaveCount(1);
+
+    await page.getByText('아이디 저장').click();
+    await expect(page.locator('.cCZhP')).toHaveCount(1);
+
+    await page.locator('.cCZhP').click();
+    await expect(page.locator('.fPbsVt')).toHaveCount(1);
+
+    await simpleLoginFromLoginPage(page, process.env.VALID_USERNAME, process.env.VALID_PASSWORD, true);
+
+    await expect(page).toHaveURL('https://www.acon3d.com/ko/toon');
+
+    await page.getByRole('navigation').locator('svg').nth(2).click({ delay : 200 });
+    await page.locator('a').filter({ hasText: '로그아웃' }).click({ delay : 200 });
+
+    await page.getByRole('link', { name: '로그인' }).click();
+    await expect(page).toHaveURL('https://www.acon3d.com/ko/toon/users/login');
+
+    await expect(page.getByPlaceholder('아이디')).toHaveValue('');
+});
+
 async function simpleLoginFromLoginPage(page, username, password, willLoginPass) {
     await page.getByPlaceholder('아이디').fill('');
     await page.getByPlaceholder('아이디').type(username, { delay: 100 }); // 글자당 0.2초 딜레이
@@ -198,9 +261,9 @@ async function simpleLoginFromLoginPage(page, username, password, willLoginPass)
         await page.getByRole('button', { name: '로그인' }).click();
         await expect(page.getByRole('button', { name: '로그인' })).toHaveCount(1);
     }
-}
+};
 
 async function simpleLogoutFromMainPage(page) {
     await page.getByRole('navigation').locator('svg').nth(2).click({ delay : 200 });
     await page.locator('a').filter({ hasText: '로그아웃' }).click({ delay : 200 });
-}
+};

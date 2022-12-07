@@ -100,7 +100,8 @@ test('2-3 비정상 로그인 (잘못된 아이디, 잘못된 비번)', async ({
 test('2-4 비정상 로그인 (맞는 아이디, 잘못된 비번으로 다회 실행)', async ({ context, page, browserName }) => {
     const userName = browserName === 'chromium' ? process.env.VALID_USERNAME_CHROME 
     : browserName === 'firefox' ? process.env.VALID_USERNAME_FIREFOX 
-    : process.env.VALID_USERNAME_WEBKIT;
+    : browserName === 'webkit' ? process.env.VALID_USERNAME_WEBKIT
+    : process.env.VALID_USERNAME;
 
     await page.goto('https://www.acon3d.com/ko/toon');
 

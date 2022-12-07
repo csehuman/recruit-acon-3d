@@ -20,8 +20,8 @@ test('1-3 유효한 로그인 (키보드 + 클릭)', async ({ context, page }) =
 
     await page.getByRole('link', { name: '로그인' }).click();
 
-    await page.getByPlaceholder('아이디').type(process.env.VALID_USERNAME, { delay: 200 }); // 글자당 0.2초 딜레이
-    await page.getByPlaceholder('비밀번호').type(process.env.VALID_PASSWORD, { delay: 200 }); // 글자당 0.2초 딜레이
+    await page.getByPlaceholder('아이디').type(process.env.VALID_USERNAME, { delay : 100 }); 
+    await page.getByPlaceholder('비밀번호').type(process.env.VALID_PASSWORD, { delay : 100 }); 
 
     await Promise.all([
         page.waitForNavigation(),
@@ -36,10 +36,10 @@ test('1-4 유효한 로그인 (키보드만)', async ({ context, page }) => {
 
     await page.getByRole('link', { name: '로그인' }).click();
 
-    await page.getByPlaceholder('아이디').type(process.env.VALID_USERNAME, { delay: 200 });
+    await page.getByPlaceholder('아이디').type(process.env.VALID_USERNAME, { delay : 100 });
     await page.keyboard.press('Tab');
 
-    await page.keyboard.type(process.env.VALID_PASSWORD, { delay : 200 });
+    await page.keyboard.type(process.env.VALID_PASSWORD, { delay : 100 });
 
     await Promise.all([
         page.waitForNavigation(),
@@ -54,8 +54,8 @@ test('2-1 비정상 로그인 (맞는 아이디, 잘못된 비번)', async ({ co
 
     await page.getByRole('link', { name: '로그인' }).click();
 
-    await page.getByPlaceholder('아이디').type(process.env.VALID_USERNAME, { delay: 200 }); // 글자당 0.2초 딜레이
-    await page.getByPlaceholder('비밀번호').type(process.env.INVALID_PASSWORD, { delay: 200 }); // 글자당 0.2초 딜레이
+    await page.getByPlaceholder('아이디').type(process.env.VALID_USERNAME, { delay : 100 }); 
+    await page.getByPlaceholder('비밀번호').type(process.env.INVALID_PASSWORD, { delay : 100 }); 
 
     await page.getByRole('button', { name: '로그인' }).click();
     await expect(page.getByRole('button', { name: '로그인' })).toHaveCount(1);
@@ -70,8 +70,8 @@ test('2-2 비정상 로그인 (잘못된 아이디, 맞는 비번)', async ({ co
 
     await page.getByRole('link', { name: '로그인' }).click();
 
-    await page.getByPlaceholder('아이디').type(process.env.INVALID_USERNAME, { delay: 200 }); // 글자당 0.2초 딜레이
-    await page.getByPlaceholder('비밀번호').type(process.env.VALID_PASSWORD, { delay: 200 }); // 글자당 0.2초 딜레이
+    await page.getByPlaceholder('아이디').type(process.env.INVALID_USERNAME, { delay : 100 }); 
+    await page.getByPlaceholder('비밀번호').type(process.env.VALID_PASSWORD, { delay : 100 }); 
 
     await page.getByRole('button', { name: '로그인' }).click();
     await expect(page.getByRole('button', { name: '로그인' })).toHaveCount(1);
@@ -86,8 +86,8 @@ test('2-3 비정상 로그인 (잘못된 아이디, 잘못된 비번)', async ({
 
     await page.getByRole('link', { name: '로그인' }).click();
 
-    await page.getByPlaceholder('아이디').type(process.env.INVALID_USERNAME, { delay: 200 }); // 글자당 0.2초 딜레이
-    await page.getByPlaceholder('비밀번호').type(process.env.INVALID_PASSWORD, { delay: 200 }); // 글자당 0.2초 딜레이
+    await page.getByPlaceholder('아이디').type(process.env.INVALID_USERNAME, { delay : 100 }); 
+    await page.getByPlaceholder('비밀번호').type(process.env.INVALID_PASSWORD, { delay : 100 }); 
 
     await page.getByRole('button', { name: '로그인' }).click();
     await expect(page.getByRole('button', { name: '로그인' })).toHaveCount(1);
@@ -98,17 +98,17 @@ test('2-3 비정상 로그인 (잘못된 아이디, 잘못된 비번)', async ({
 });
 
 test('2-4 비정상 로그인 (맞는 아이디, 잘못된 비번으로 다회 실행)', async ({ context, page, browserName }) => {
-    const userName = browserName === 'chromium' ? process.env.VALID_USERNAME_CHROME 
-    : browserName === 'firefox' ? process.env.VALID_USERNAME_FIREFOX 
-    : browserName === 'webkit' ? process.env.VALID_USERNAME_WEBKIT
+    const userName = browserName === 'chromium' ? process.env.VALID_USERNAME_CHROME_1 
+    : browserName === 'firefox' ? process.env.VALID_USERNAME_FIREFOX_1 
+    : browserName === 'webkit' ? process.env.VALID_USERNAME_WEBKIT_1
     : process.env.VALID_USERNAME;
 
     await page.goto('https://www.acon3d.com/ko/toon');
 
     await page.getByRole('link', { name: '로그인' }).click();
 
-    await page.getByPlaceholder('아이디').type(userName, { delay: 200 }); // 글자당 0.2초 딜레이
-    await page.getByPlaceholder('비밀번호').type(process.env.INVALID_PASSWORD, { delay: 200 }); // 글자당 0.2초 딜레이
+    await page.getByPlaceholder('아이디').type(userName, { delay : 100 }); 
+    await page.getByPlaceholder('비밀번호').type(process.env.INVALID_PASSWORD, { delay : 100 }); 
 
     for(let i = 0; i < 7; i++) {
         await page.getByRole('button', { name: '로그인' }).click();
@@ -194,8 +194,8 @@ test('4-1 로그아웃', async ({ context, page }) => {
 
     await expect(page).toHaveURL('https://www.acon3d.com/ko/toon');
 
-    await page.getByRole('navigation').locator('svg').nth(2).click({ delay : 200 });
-    await page.locator('a').filter({ hasText: '로그아웃' }).click({ delay : 200 });
+    await page.getByRole('navigation').locator('svg').nth(2).click({ delay : 100 });
+    await page.locator('a').filter({ hasText: '로그아웃' }).click({ delay : 100 });
 
     await page.getByRole('link', { name: '로그인' }).click();
     await expect(page).toHaveURL('https://www.acon3d.com/ko/toon/users/login');
@@ -211,8 +211,8 @@ test('5-1 아이디 저장 기능 작동 (활성화 상태)', async ({ context, 
 
     await expect(page).toHaveURL('https://www.acon3d.com/ko/toon');
 
-    await page.getByRole('navigation').locator('svg').nth(2).click({ delay : 200 });
-    await page.locator('a').filter({ hasText: '로그아웃' }).click({ delay : 200 });
+    await page.getByRole('navigation').locator('svg').nth(2).click({ delay : 100 });
+    await page.locator('a').filter({ hasText: '로그아웃' }).click({ delay : 100 });
 
     await page.getByRole('link', { name: '로그인' }).click();
     await expect(page).toHaveURL('https://www.acon3d.com/ko/toon/users/login');
@@ -239,8 +239,8 @@ test('5-2 아이디 저장 기능 작동 (비활성화 상태)', async ({ contex
 
     await expect(page).toHaveURL('https://www.acon3d.com/ko/toon');
 
-    await page.getByRole('navigation').locator('svg').nth(2).click({ delay : 200 });
-    await page.locator('a').filter({ hasText: '로그아웃' }).click({ delay : 200 });
+    await page.getByRole('navigation').locator('svg').nth(2).click({ delay : 100 });
+    await page.locator('a').filter({ hasText: '로그아웃' }).click({ delay : 100 });
 
     await page.getByRole('link', { name: '로그인' }).click();
     await expect(page).toHaveURL('https://www.acon3d.com/ko/toon/users/login');
@@ -250,12 +250,12 @@ test('5-2 아이디 저장 기능 작동 (비활성화 상태)', async ({ contex
 
 async function simpleLoginFromLoginPage(page, username, password, willLoginPass) {
     await page.getByPlaceholder('아이디').fill('');
-    await page.getByPlaceholder('아이디').type(username, { delay: 100 }); // 글자당 0.2초 딜레이
-    await page.getByPlaceholder('비밀번호').type(password, { delay: 100 }); // 글자당 0.2초 딜레이
+    await page.getByPlaceholder('아이디').type(username, { delay : 100 }); 
+    await page.getByPlaceholder('비밀번호').type(password, { delay : 100 }); 
 
     if (willLoginPass) {
         await Promise.all([
-            page.waitForNavigation({ waitUntil : 'commit' }),
+            page.waitForNavigation(),
             page.getByRole('button', { name: '로그인' }).click()
         ]);
     } else {
@@ -265,6 +265,6 @@ async function simpleLoginFromLoginPage(page, username, password, willLoginPass)
 };
 
 async function simpleLogoutFromMainPage(page) {
-    await page.getByRole('navigation').locator('svg').nth(2).click({ delay : 200 });
-    await page.locator('a').filter({ hasText: '로그아웃' }).click({ delay : 200 });
+    await page.getByRole('navigation').locator('svg').nth(2).click({ delay : 100 });
+    await page.locator('a').filter({ hasText: '로그아웃' }).click({ delay : 100 });
 };

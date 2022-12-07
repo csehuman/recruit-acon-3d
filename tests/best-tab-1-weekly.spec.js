@@ -131,5 +131,4 @@ test.describe('3. 주간 베스트 탭 확인', () => {
             expect(parseInt(viewCountString.replace(/,/g, ''))).toBeGreaterThanOrEqual(1);
         }
     });
-
 });
